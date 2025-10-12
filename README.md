@@ -9,6 +9,7 @@ Outlier detection aims to find objects that behave differently from the majority
 * python=3.8
 * pytorch=1.8.2
 * scikit-learn=1.2
+* 
 
 ## Contact
 If you have any question, please contact farstars@qq.com
