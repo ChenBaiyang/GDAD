@@ -17,6 +17,8 @@ To run GDAD with default parameters:
 python run_GDAD_default.py
 ```
 To run GDAD with parameter tuning:
+
+We only tune the fuzzy radius parameter $p$ (percentile) among the set of {0.1, 0.3, 0.5, 0.7, 0.9}.
 ```
 python run_GDAD_GridSearch.py
 ```
