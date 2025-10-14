@@ -111,17 +111,15 @@ class GDAD(object):
 
     def make_fuzzy_relation_mat(self, idx, p=0.8):
         self.make_dist_matrix(idx)
-        # delta = 1 - torch.quantile(self.dist_rel_mat.view(-1), p).round(3)
+        # delta = 1 - np.percentile(self.dist_rel_mat.view(-1).cpu(), p*100).round(3)
 
-        flattened = self.dist_rel_mat.view(-1)
-        k = int(p * len(flattened))  # 第 k 小的值对应 p 分位数
-        delta = 1 - (flattened.kthvalue(k).values * 1000).round()/1000
-
+        k = int(p * self.n * self.n)  # 第 k 小的值对应 p 分位数
+        delta = 1 - (self.dist_rel_mat.view(-1).kthvalue(k).values * 1000).round()/1000
 
         self.dist_rel_mat *= -1
         self.dist_rel_mat += 1
-        self.dist_rel_mat.masked_fill_(self.dist_rel_mat < delta, 0)
         # self.dist_rel_mat[self.dist_rel_mat < delta] = 0  # Winows+Pytorch 1.8.2 (cpu)实测，该赋值操作会额外占用大量内存
+        self.dist_rel_mat.masked_fill_(self.dist_rel_mat < delta, 0)
         self.weights[idx] = -torch.mean(torch.log2(self.dist_rel_mat.mean(dim=1))).unsqueeze(0)
 
 
