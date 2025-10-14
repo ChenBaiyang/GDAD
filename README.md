@@ -14,12 +14,13 @@ Assume the dataset be saved in a Numpy npz file with n samples and m dimensions.
 
 To run GDAD with default parameters:
 ```
-python run_GDAD_GridSearch.py
+python run_GDAD_default.py
 ```
 To run GDAD with parameter tuning:
 ```
-python run_GDAD_default.py
+python run_GDAD_GridSearch.py
 ```
+
 
 ## Citation
 If you find the code or datasets useful in your research, please consider citing:
