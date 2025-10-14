@@ -31,7 +31,7 @@ class GDAD(object):
     def grid_search(self, train_X, train_y, paras, nominals=None):
         self.n, self.m = train_X.shape
         self.nominals = nominals
-        self.data = torch.from_numpy(train_X.T).float().unsqueeze(-1)
+        self.data = torch.from_numpy(train_X.T).float().unsqueeze(-1).to(device)
         self.mutual_information(train_X)
         self.attribute_partition()
 
@@ -95,11 +95,11 @@ class GDAD(object):
         if len(bin) == 1:
             bin = bin[0]
             temp = self.data[bin]
-            self.dist_rel_mat = torch.cdist(temp, temp, p=1)  # (n,d)-->>(n,n)
+            self.dist_rel_mat = torch.cdist(temp, temp, p=1).float()  # (n,d)-->>(n,n)
             if self.nominals[bin]:
                 self.dist_rel_mat =  (self.dist_rel_mat > 1e-5).float()
         else:
-            self.dist_rel_mat = torch.zeros(self.n, self.n, dtype=torch.float32)
+            self.dist_rel_mat = torch.zeros(self.n, self.n, dtype=torch.float32).to(device)
             for j, bin_ in enumerate(bin):
                 temp = self.data[bin_]
                 mat = torch.cdist(temp, temp, p=1)
@@ -111,7 +111,13 @@ class GDAD(object):
 
     def make_fuzzy_relation_mat(self, idx, p=0.8):
         self.make_dist_matrix(idx)
-        delta = 1 - np.percentile(self.dist_rel_mat.view(-1), p*100).round(3)
+        # delta = 1 - torch.quantile(self.dist_rel_mat.view(-1), p).round(3)
+
+        flattened = self.dist_rel_mat.view(-1)
+        k = int(p * len(flattened))  # 第 k 小的值对应 p 分位数
+        delta = 1 - (flattened.kthvalue(k).values * 1000).round()/1000
+
+
         self.dist_rel_mat *= -1
         self.dist_rel_mat += 1
         self.dist_rel_mat.masked_fill_(self.dist_rel_mat < delta, 0)
@@ -130,17 +136,17 @@ class GDAD(object):
             p = self.p
             self.n, self.m = data.shape
             self.nominals = nominals
-            self.data = torch.from_numpy(data.T).float().unsqueeze(-1)
+            self.data = torch.from_numpy(data.T).float().unsqueeze(-1).to(device)
             if self.mi is None:
                 self.mutual_information(data)
                 self.attribute_partition()
 
 
-        self.FGD = torch.zeros((self.n_bins, self.n))
-        self.weights = torch.zeros((self.n_bins, 1))
+        self.FGD = torch.zeros((self.n_bins, self.n), dtype=torch.float32).to(device)
+        self.weights = torch.zeros((self.n_bins, 1), dtype=torch.float32).to(device)
         for idx in range(self.n_bins):
             self.make_fuzzy_relation_mat(idx, p)
             self.fuzzy_granule_density(idx)
         od = 1 - (self.FGD * self.weights).mean(dim=0)
         del self.dist_rel_mat
-        return od
+        return od.cpu().numpy()
