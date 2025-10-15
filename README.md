@@ -2,7 +2,21 @@
 Baiyang Chen, Zhong Yuan, Dezhong Peng, Xiaoliang Chen, Hongmei Chen, Yingke Chen: "[Integrating granular computing with density estimation for anomaly detection in high-dimensional heterogeneous data](https://www.sciencedirect.com/science/article/pii/S0020025524014804)"[J]. Information sciences, 690: 121566 (2025), DOI: 10.1016/j.ins.2024.121566
 
 ## Abstract
-Outlier detection aims to find objects that behave differently from the majority of the data. Existing unsupervised approaches often process data with a single scale, which may not capture the multi-scale nature of the data. In this paper, we propose a novel information fusion model based on multi-scale fuzzy granules and an unsupervised outlier detection algorithm with the fuzzy rough set theory. First, a multi-scale information fusion model is formulated based on fuzzy granules. Then we employ fuzzy approximations to define the outlier factor of multi-scale fuzzy granules centered at each data point. Finally, the outlier score is calculated by aggregating the outlier factors of a set of multi-scale fuzzy granules.
+Detecting anomalies in complex data is crucial for knowledge discovery and data mining
+across a wide range of applications. While density-based methods are effective for handling
+varying data densities and diverse distributions, they often struggle with accurately estimating
+densities in heterogeneous, uncertain data and capturing interdependencies among features in
+high-dimensional spaces. This paper proposes a fuzzy granule density-based anomaly detection
+algorithm (GDAD) for heterogeneous data. Specifically, GDAD first partitions high-dimensional
+attributes into subspaces based on their interdependencies and employs fuzzy information
+granules to represent data. The core of the method is the definition of fuzzy granule density,
+which leverages local neighborhood information alongside global density patterns and effectively
+characterizes anomalies in data. Each object is then assigned a fuzzy granule density-based
+anomaly factor, reflecting its likelihood of being anomalous. Through extensive experimentation
+on various real-world datasets, GDAD has demonstrated superior performance, matching or
+surpassing existing state-of-the-art methods. GDAD’s integration of granular computing with
+density estimation provides a practical framework for anomaly detection in high-dimensional
+heterogeneous data.
 
 ## Environment
 * python=3.8
