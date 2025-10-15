@@ -5,5 +5,10 @@ from sklearn.preprocessing import minmax_scale
 from model import GDAD
 
 '''
-The original code was unfortunately lost due to the ***BitLocker*** ......
-To be continued'''
+A previous version of the GDAD codebase was lost due to a BitLocker encryption issue. 
+This release represents a complete reconstruction of the project. The rebuild provided 
+an opportunity to implement significant improvements, most notably the new GPU 
+acceleration support. While the core algorithm logic has been carefully recreated from 
+the original paper, the numerical results may exhibit slight variations compared to those
+ reported in the published paper.
+'''
